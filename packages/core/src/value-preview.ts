@@ -33,7 +33,18 @@ const serializeValue = (value: unknown): string => {
 
   try {
     const seen = new WeakSet<object>()
-    const serialized = JSON.stringify(value, (_key, nestedValue: unknown) => {
+    let serializable = value
+    let prefix = ''
+    if (value instanceof Map) {
+      seen.add(value)
+      serializable = [...value.entries()]
+      prefix = `Map(${value.size}) `
+    } else if (value instanceof Set) {
+      seen.add(value)
+      serializable = [...value.values()]
+      prefix = `Set(${value.size}) `
+    }
+    const serialized = JSON.stringify(serializable, (_key, nestedValue: unknown) => {
       if (typeof nestedValue === 'bigint') {
         return `${nestedValue}n`
       }
@@ -42,10 +53,24 @@ const serializeValue = (value: unknown): string => {
           return '[Circular]'
         }
         seen.add(nestedValue)
+        if (nestedValue instanceof Map) {
+          return {
+            $type: 'Map',
+            entries: [...nestedValue.entries()],
+          }
+        }
+        if (nestedValue instanceof Set) {
+          return {
+            $type: 'Set',
+            values: [...nestedValue.values()],
+          }
+        }
       }
       return nestedValue
     })
-    return serialized ?? Object.prototype.toString.call(value)
+    return serialized
+      ? `${prefix}${serialized}`
+      : Object.prototype.toString.call(value)
   } catch {
     return Object.prototype.toString.call(value)
   }

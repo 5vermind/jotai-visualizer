@@ -151,14 +151,14 @@ describe('graph UI model', () => {
     ).toContain('jv-flow-node--dimmed')
   })
 
-  it('lays out 100 nodes and preserves only explicitly saved positions', () => {
-    const graphNodes: GraphNode[] = Array.from({ length: 100 }, (_, index) => ({
+  it('lays out 500 nodes within budget and preserves saved positions', () => {
+    const graphNodes: GraphNode[] = Array.from({ length: 500 }, (_, index) => ({
       kind: 'atom',
       id: `atom:${index}`,
       storeId: 'store:1',
       label: `atom${index}`,
     }))
-    const graphEdges: GraphEdge[] = Array.from({ length: 99 }, (_, index) => ({
+    const graphEdges: GraphEdge[] = Array.from({ length: 499 }, (_, index) => ({
       kind: 'atom-dependency',
       id: `edge:${index}`,
       source: `atom:${index}`,
@@ -178,7 +178,7 @@ describe('graph UI model', () => {
     )
     const duration = performance.now() - startedAt
 
-    expect(positioned).toHaveLength(100)
+    expect(positioned).toHaveLength(500)
     expect(positioned.find((node) => node.id === 'atom:0')?.position).toEqual({
       x: 777,
       y: 333,
@@ -189,7 +189,7 @@ describe('graph UI model', () => {
           Number.isFinite(node.position.x) && Number.isFinite(node.position.y),
       ),
     ).toBe(true)
-    expect(duration).toBeLessThan(1_000)
+    expect(duration).toBeLessThan(2_000)
 
     const forced = layoutFlowNodes(
       flow.nodes,

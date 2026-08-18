@@ -15,7 +15,7 @@ Jotai의 atom, atom 간 의존성, 그리고 atom을 소비하는 React 컴포�
 
 ## 현재 상태
 
-M4 자동 계측을 완료했으며 M5 호환성 및 성능 검증을 준비하고 있습니다.
+M5 호환성 및 성능 검증을 완료했으며 M6 첫 오픈소스 릴리스를 준비하고 있습니다.
 구현 범위, 아키텍처, 단계별 완료 조건은
 [프로젝트 로드맵](docs/PROJECT_ROADMAP.md)을 기준으로 관리합니다.
 
@@ -92,6 +92,8 @@ pnpm dev
 - [M2 구현 계획 및 결과](docs/M2_IMPLEMENTATION_PLAN.md)
 - [M3 Embedded Visualizer 사용법](docs/M3_EMBEDDED_VISUALIZER.md)
 - [M4 Automatic Instrumentation](docs/M4_AUTOMATIC_INSTRUMENTATION.md)
+- [Compatibility matrix](docs/COMPATIBILITY.md)
+- [Performance budgets](docs/PERFORMANCE.md)
 - [ADR 0003: development-only Babel instrumentation](docs/adr/0003-development-only-babel-instrumentation.md)
 - [ADR 0002: graph renderer와 layout](docs/adr/0002-graph-renderer-and-layout.md)
 - [ADR 0001: jotai-devtools runtime adapter](docs/adr/0001-jotai-devtools-runtime-adapter.md)

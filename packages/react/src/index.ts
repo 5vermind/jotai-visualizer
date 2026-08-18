@@ -20,7 +20,10 @@ export {
 export type {
   ComponentMetadata,
   ConsumerAccess,
+  RuntimeAtom,
+  RuntimeAtomSnapshot,
   RuntimeGraph,
   RuntimeGraphOptions,
+  RuntimeStore,
 } from '@jotai-visualizer/core'
 export type { JotaiStore } from './jotai-types.js'

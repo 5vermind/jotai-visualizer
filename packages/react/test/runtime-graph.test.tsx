@@ -344,4 +344,46 @@ describe('Jotai runtime graph spike', () => {
     expect(runtime.getSnapshot().edges).toHaveLength(1)
     vi.useRealTimers()
   })
+
+  it('does not accumulate visible registry entries across repeated HMR cleanup', () => {
+    vi.useFakeTimers()
+    const runtime = createRuntimeGraph()
+    render(
+      <RuntimeGraphProvider runtime={runtime}>
+        <div />
+      </RuntimeGraphProvider>,
+    )
+
+    for (let index = 0; index < 100; index += 1) {
+      const store = createStore()
+      const target = labelAtom(atom(index), `hmrCycleAtom${index}`)
+      const file = `src/HmrCycle${index}.tsx`
+      runtime.registerConsumer({
+        store,
+        atom: target,
+        component: {
+          id: `${file}#HmrCycle`,
+          name: 'HmrCycle',
+          file,
+        },
+        access: 'read',
+      })
+      let dispose: (() => void) | undefined
+      registerVisualizerModule(
+        {
+          dispose(callback) {
+            dispose = callback
+          },
+        },
+        file,
+      )
+      act(() => {
+        dispose?.()
+        vi.advanceTimersByTime(250)
+      })
+    }
+
+    expect(runtime.getSnapshot()).toEqual({ nodes: [], edges: [] })
+    vi.useRealTimers()
+  })
 })

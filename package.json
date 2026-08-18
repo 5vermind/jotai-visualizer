@@ -12,7 +12,9 @@
   },
   "scripts": {
     "build": "pnpm --recursive --if-present run build",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm verify:production",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm benchmark:graph && pnpm verify:production",
+    "benchmark": "pnpm build && pnpm benchmark:graph",
+    "benchmark:graph": "node scripts/benchmark-graph.mjs",
     "dev": "pnpm --filter @jotai-visualizer/example-vite-react dev",
     "lint": "eslint .",
     "test": "vitest run",

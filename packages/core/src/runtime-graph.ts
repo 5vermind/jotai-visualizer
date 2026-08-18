@@ -90,6 +90,12 @@ export const createRuntimeGraph = (
     string,
     { revision: number; value: unknown }
   >()
+  const promiseStates = new WeakMap<
+    Promise<unknown>,
+    | { status: 'pending' }
+    | { status: 'fulfilled'; value: unknown }
+    | { reason: unknown; status: 'rejected' }
+  >()
 
   const applyInternalPatch = (patch: GraphPatch) => {
     const result = graphStore.applyPatch(patch)
@@ -107,6 +113,54 @@ export const createRuntimeGraph = (
     `${getStoreId(store)}/${atomIds.get(atom)}`
   const getAtomLabel = (atom: RuntimeAtom) => atom.debugLabel || atom.toString()
 
+  const observePromise = (
+    promise: Promise<unknown>,
+    nodeId: string,
+    context: { atomLabel: string; nodeId: string; storeId: string },
+  ) => {
+    if (promiseStates.has(promise)) {
+      return
+    }
+    promiseStates.set(promise, { status: 'pending' })
+    const settle = (
+      state:
+        | { status: 'fulfilled'; value: unknown }
+        | { reason: unknown; status: 'rejected' },
+    ) => {
+      promiseStates.set(promise, state)
+      const revisionState = atomRevisions.get(nodeId)
+      const node = graphStore.getNode(nodeId)
+      if (revisionState?.value !== promise || node?.kind !== 'atom') {
+        return
+      }
+      const settledValue =
+        state.status === 'fulfilled' ? state.value : state.reason
+      const revision = (node.revision ?? 0) + 1
+      atomRevisions.set(nodeId, { revision, value: settledValue })
+      applyInternalPatch({
+        upsertNodes: [
+          {
+            ...node,
+            revision,
+            ...(options.valuePreview?.enabled
+              ? {
+                  valuePreview: createValuePreview(
+                    settledValue,
+                    context,
+                    options.valuePreview,
+                  ),
+                }
+              : {}),
+          },
+        ],
+      })
+    }
+    void promise.then(
+      (value) => settle({ status: 'fulfilled', value }),
+      (reason: unknown) => settle({ status: 'rejected', reason }),
+    )
+  }
+
   const createAtomNode = (
     store: RuntimeStore,
     atom: RuntimeAtom,
@@ -116,19 +170,31 @@ export const createRuntimeGraph = (
     const storeId = getStoreId(store)
     const label = getAtomLabel(atom)
     const previous = graphStore.getNode(id)
+    let inspectedValue = value.present ? value.value : undefined
+    if (value.present && value.value instanceof Promise) {
+      const promiseState = promiseStates.get(value.value)
+      if (promiseState?.status === 'fulfilled') {
+        inspectedValue = promiseState.value
+      } else if (promiseState?.status === 'rejected') {
+        inspectedValue = promiseState.reason
+      } else {
+        observePromise(value.value, id, { atomLabel: label, nodeId: id, storeId })
+      }
+    }
     const previousRevision =
       previous?.kind === 'atom' ? (previous.revision ?? 0) : 0
     let revision = previousRevision
     if (value.present) {
       const atomRevision = atomRevisions.get(id)
       revision = atomRevision
-        ? atomRevision.revision + (Object.is(atomRevision.value, value.value) ? 0 : 1)
+        ? atomRevision.revision +
+          (Object.is(atomRevision.value, inspectedValue) ? 0 : 1)
         : 0
-      atomRevisions.set(id, { revision, value: value.value })
+      atomRevisions.set(id, { revision, value: inspectedValue })
     }
     const valuePreview = value.present
       ? createValuePreview(
-          value.value,
+          inspectedValue,
           { atomLabel: label, nodeId: id, storeId },
           options.valuePreview,
         )

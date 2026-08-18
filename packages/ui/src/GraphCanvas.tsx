@@ -158,6 +158,7 @@ export function GraphCanvas({
       minZoom={0.2}
       maxZoom={1.8}
       nodesConnectable={false}
+      onlyRenderVisibleElements
       deleteKeyCode={null}
       aria-label="Jotai state dependency graph"
     >

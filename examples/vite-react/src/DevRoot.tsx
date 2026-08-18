@@ -9,6 +9,7 @@ import {
 
 import { App } from './App.js'
 import { countAtom } from './atoms.js'
+import { BenchmarkRoot } from './BenchmarkRoot.js'
 
 const runtime = createRuntimeGraph({
   valuePreview: {
@@ -21,6 +22,10 @@ const customStore = createStore()
 customStore.set(countAtom, 10)
 
 export function DevRoot() {
+  if (new URLSearchParams(window.location.search).get('benchmark') === '500') {
+    return <BenchmarkRoot />
+  }
+
   return (
     <RuntimeGraphProvider runtime={runtime}>
       <JotaiGraphCollector />

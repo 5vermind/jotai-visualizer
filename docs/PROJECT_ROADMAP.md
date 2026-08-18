@@ -1,6 +1,6 @@
 # Jotai Visualizer 프로젝트 로드맵
 
-> 상태: Active — M4 완료, M5 대기
+> 상태: Active — M5 완료, M6 대기
 > 기준일: 2026-08-18
 > 문서 역할: 구현 범위, 아키텍처, 단계별 완료 조건에 대한 단일 기준 문서
 
@@ -424,23 +424,38 @@ Dagre를 우선 검토하고 compound graph가 필요할 때 ELK로 확장한다
 
 **목표:** 실제 Jotai 사용 패턴과 큰 graph에서 안정적으로 동작한다.
 
+**상태:** 완료 (2026-08-18)
+
 산출물:
 
-- [ ] async/Suspense atom example과 test
-- [ ] `atomFamily` 및 동적 atom test
-- [ ] 조건부 dependency test
-- [ ] nested Provider와 multiple Store test
-- [ ] error/Promise/Map/Set 값 preview test
-- [ ] 500+ node benchmark fixture
-- [ ] memory lifecycle test
-- [ ] 지원 Jotai/React/Vite 버전 matrix
+- [x] async/Suspense atom example과 test
+- [x] `atomFamily` 및 동적 atom test
+- [x] 조건부 dependency test
+- [x] nested Provider와 multiple Store test
+- [x] error/Promise/Map/Set 값 preview test
+- [x] 500+ node benchmark fixture
+- [x] memory lifecycle test
+- [x] 지원 Jotai/React/Vite 버전 matrix
 
 완료 조건:
 
-- [ ] 500 node 기준 interaction 성능 목표를 수립하고 충족한다.
-- [ ] unmount/HMR 반복 후 registry가 지속적으로 증가하지 않는다.
-- [ ] 지원 버전 조합의 integration test가 CI를 통과한다.
-- [ ] 알려진 호환성 제한이 사용자 문서에 공개된다.
+- [x] 500 node 기준 interaction 성능 목표를 수립하고 충족한다.
+- [x] unmount/HMR 반복 후 registry가 지속적으로 증가하지 않는다.
+- [x] 지원 버전 조합의 integration test가 CI를 통과한다.
+- [x] 알려진 호환성 제한이 사용자 문서에 공개된다.
+
+검증 기록:
+
+- mounted async/Suspense pending→resolved integration
+- atomFamily member별 mount/unmount
+- nested Provider 동일 atom Store 격리
+- Error/Promise/Map/Set/circular collection preview
+- 500 nodes/499 edges runtime/filter/layout budget
+- Chrome panel-ready 1,265ms, search 115ms, visible DOM 16 nodes
+- consumer/Store와 HMR cleanup 100회 후 empty snapshot
+- React 18/Jotai 2.20.0과 React 19/Jotai 2.20.2 matrix
+- [Compatibility 문서](COMPATIBILITY.md)
+- [Performance 문서](PERFORMANCE.md)
 
 ### M6 — First open-source release
 
@@ -550,12 +565,12 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 
 ## 15. 다음 실행 항목
 
-현재 다음 작업은 **M5 — Compatibility and performance**다.
+현재 다음 작업은 **M6 — First open-source release**다.
 
-1. Jotai/React/Vite 지원 version matrix를 확정한다.
-2. async/Suspense atom과 atomFamily integration test를 추가한다.
-3. nested Provider와 multiple Store lifecycle을 검증한다.
-4. 500+ node browser benchmark와 memory lifecycle test를 실행한다.
-5. 알려진 호환성 제한과 performance budget을 문서화한다.
+1. package별 public API와 publish export를 확정한다.
+2. changeset/release workflow와 package provenance를 구성한다.
+3. 설치, security/privacy, migration 문서를 완성한다.
+4. 새 소비 프로젝트에서 문서 설치 예제를 재현한다.
+5. dogfooding 결과를 반영하고 `0.1.0`을 배포한다.
 
-M5 완료 전에는 브라우저 확장, time travel, 다중 bundler 지원을 시작하지 않는다.
+M6 완료 전에는 브라우저 확장, time travel, 다중 bundler 지원을 시작하지 않는다.

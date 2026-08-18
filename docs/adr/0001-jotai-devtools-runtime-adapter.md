@@ -1,6 +1,6 @@
 # ADR 0001: M1 atom inspector에 jotai-devtools utility를 제한적으로 재사용한다
 
-- 상태: Accepted through M3, M5 compatibility 단계에서 재검토
+- 상태: Accepted for 0.1 with Jotai `>=2.20 <3`
 - 결정일: 2026-08-18
 - 범위: `@jotai-visualizer/react`의 atom snapshot 수집
 
@@ -134,3 +134,14 @@ M2에서 graph storage, identity, lifecycle, traversal, value policy를 모두
 utility를 유지한다. 설치 의존성과 Store 생성 순서 문제는 해결된 것이 아니므로
 공개 호환성 범위를 확정하는 M5에서 async atom, atomFamily, Jotai version matrix와
 함께 다시 평가한다.
+
+## M5 재검토 결과
+
+Jotai 2.20.0과 2.20.2에서 conditional dependency, mounted async atom, atomFamily,
+nested Provider, multiple Store integration이 통과했다. Core/UI가 adapter와 분리되어
+있고 M6 직전 별도 headless inspector를 재구현하는 비용이 더 크므로 0.1에서는
+현재 adapter를 유지한다.
+
+대신 peer range를 Jotai `>=2.20.0 <3.0.0`으로 제한한다. Jotai 3 지원은 private
+store API 변경을 확인하고 versioned adapter 또는 upstream headless inspector를
+검토한 뒤 별도 결정한다.
