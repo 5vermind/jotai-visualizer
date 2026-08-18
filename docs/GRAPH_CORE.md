@@ -105,6 +105,10 @@ const atomNodeId = runtime.getAtomNodeId(store, atom)
 같은 object는 release 전까지 동일한 ID를 사용한다. 같은 atom object를 여러
 Store에서 사용하면 `storeId/atomId` 조합으로 서로 다른 node가 된다.
 
+Atom node에는 값 변경을 UI가 감지할 수 있는 `revision`과 Jotai 내부 atom 여부를
+표시하는 `private` metadata가 포함될 수 있다. Revision은 value preview 활성화와
+무관하게 `Object.is` 기준 값 변경 시 증가한다.
+
 ### Consumer lifecycle
 
 `registerConsumer`는 같은 Store/atom/component/access 관계를 ref-count한다.

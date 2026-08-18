@@ -154,4 +154,33 @@ describe('framework-independent RuntimeGraph', () => {
     runtime.releaseStore(store)
     expect(runtime.getStoreId(store)).not.toBe(firstStoreId)
   })
+
+  it('tracks atom revisions and private metadata independently of previews', () => {
+    const runtime = createRuntimeGraph()
+    const store = {}
+    const atom = {
+      ...createAtomIdentity('privateAtom'),
+      debugPrivate: true,
+    }
+
+    const sync = (value: number) =>
+      runtime.syncAtomSnapshot(store, {
+        values: new Map([[atom, value]]),
+        dependents: new Map(),
+      })
+
+    sync(1)
+    sync(1)
+    let node = runtime
+      .getSnapshot()
+      .nodes.find((candidate) => candidate.kind === 'atom')
+    expect(node).toMatchObject({ private: true, revision: 0 })
+    expect(node).not.toHaveProperty('valuePreview')
+
+    sync(2)
+    node = runtime
+      .getSnapshot()
+      .nodes.find((candidate) => candidate.kind === 'atom')
+    expect(node).toMatchObject({ private: true, revision: 1 })
+  })
 })

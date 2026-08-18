@@ -3,8 +3,8 @@ import { createRoot } from 'react-dom/client'
 import { Provider, createStore } from 'jotai'
 
 import {
-  GraphSnapshotLogger,
   JotaiGraphCollector,
+  JotaiVisualizer,
   RuntimeGraphProvider,
   createRuntimeGraph,
 } from '@jotai-visualizer/react'
@@ -33,14 +33,14 @@ createRoot(root).render(
   <StrictMode>
     <RuntimeGraphProvider runtime={runtime}>
       <JotaiGraphCollector />
-      <GraphSnapshotLogger />
+      <JotaiVisualizer initialOpen />
       <main>
         <header className="hero">
-          <p className="eyebrow">M1 runtime feasibility fixture</p>
+          <p className="eyebrow">M3 embedded visualizer fixture</p>
           <h1>Jotai Visualizer</h1>
           <p>
-            Open the browser console to inspect the live atom, dependency, and
-            component consumer graph as JSON.
+            Use the embedded panel to inspect live atoms, dependencies, and
+            component consumers across isolated Stores.
           </p>
         </header>
         <App scope="Default store" />

@@ -15,32 +15,34 @@ Jotai의 atom, atom 간 의존성, 그리고 atom을 소비하는 React 컴포�
 
 ## 현재 상태
 
-M2 Graph Core 구현을 완료했으며 M3 Embedded Visualizer를 준비하고 있습니다.
+M3 Embedded Visualizer MVP를 완료했으며 M4 자동 계측을 준비하고 있습니다.
 구현 범위, 아키텍처, 단계별 완료 조건은
 [프로젝트 로드맵](docs/PROJECT_ROADMAP.md)을 기준으로 관리합니다.
 
-## 첫 번째 릴리스의 모습
+## 현재 개발 버전 사용법
 
-Vite 기반 React 애플리케이션에서 개발 모드에만 Visualizer를 활성화합니다.
-
-```ts
-// vite.config.ts
-import jotaiVisualizer from '@jotai-visualizer/vite'
-
-export default defineConfig({
-  plugins: [react(), jotaiVisualizer()],
-})
-```
+M4 자동 계측 전에는 Runtime provider, Store collector, tracked hook을 수동으로
+연결합니다.
 
 ```tsx
-import { JotaiVisualizer } from '@jotai-visualizer/react'
+import {
+  JotaiGraphCollector,
+  JotaiVisualizer,
+  RuntimeGraphProvider,
+  createRuntimeGraph,
+} from '@jotai-visualizer/react'
 
-function App() {
-  return (
-    <>
+const runtime = createRuntimeGraph()
+
+function Root() {
+  return import.meta.env.DEV ? (
+    <RuntimeGraphProvider runtime={runtime}>
+      <JotaiGraphCollector />
       <Application />
-      {import.meta.env.DEV && <JotaiVisualizer />}
-    </>
+      <JotaiVisualizer />
+    </RuntimeGraphProvider>
+  ) : (
+    <Application />
   )
 }
 ```
@@ -67,6 +69,8 @@ pnpm dev
 - [M1 Runtime Spike 사용법](docs/M1_RUNTIME_SPIKE.md)
 - [Graph Core 계약](docs/GRAPH_CORE.md)
 - [M2 구현 계획 및 결과](docs/M2_IMPLEMENTATION_PLAN.md)
+- [M3 Embedded Visualizer 사용법](docs/M3_EMBEDDED_VISUALIZER.md)
+- [ADR 0002: graph renderer와 layout](docs/adr/0002-graph-renderer-and-layout.md)
 - [ADR 0001: jotai-devtools runtime adapter](docs/adr/0001-jotai-devtools-runtime-adapter.md)
 - [기여 가이드](CONTRIBUTING.md)
 

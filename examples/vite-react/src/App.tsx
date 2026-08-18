@@ -3,7 +3,21 @@ import {
   useTrackedAtomValue,
 } from '@jotai-visualizer/react'
 
-import { countAtom, countStatusAtom, doubledCountAtom } from './atoms.js'
+import {
+  countAtom,
+  countStatusAtom,
+  doubledCountAtom,
+  privateDiagnosticsAtom,
+} from './atoms.js'
+
+function InternalDiagnostics({ scope }: { scope: string }) {
+  useTrackedAtomValue(privateDiagnosticsAtom, {
+    id: `src/App.tsx#${scope}InternalDiagnostics`,
+    name: `${scope} InternalDiagnostics`,
+    file: 'examples/vite-react/src/App.tsx',
+  })
+  return null
+}
 
 function Counter({ scope }: { scope: string }) {
   const [count, setCount] = useTrackedAtom(countAtom, {
@@ -73,6 +87,7 @@ export function App({ scope }: { scope: string }) {
 
   return (
     <section className="scope" aria-labelledby={`${scopeId}-title`}>
+      <InternalDiagnostics scope={scope} />
       <div className="scope-heading">
         <p className="eyebrow">Independent Jotai state scope</p>
         <h2 id={`${scopeId}-title`}>{scope}</h2>

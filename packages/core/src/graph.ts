@@ -13,6 +13,8 @@ type GraphNodeBase = {
 export type AtomNode = GraphNodeBase & {
   kind: 'atom'
   storeId: string
+  private?: boolean
+  revision?: number
   valuePreview?: string
 }
 

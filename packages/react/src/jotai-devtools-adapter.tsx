@@ -9,7 +9,7 @@ import type { JotaiStore } from './jotai-types.js'
 type AnyAtom = Atom<unknown>
 
 export function JotaiGraphCollector({
-  shouldShowPrivateAtoms = false,
+  shouldShowPrivateAtoms = true,
   store,
 }: {
   shouldShowPrivateAtoms?: boolean

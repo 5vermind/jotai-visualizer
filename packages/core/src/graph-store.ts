@@ -34,6 +34,8 @@ const nodesEqual = (left: GraphNode, right: GraphNode) =>
   (left.kind !== 'atom' ||
     (right.kind === 'atom' &&
       left.storeId === right.storeId &&
+      left.private === right.private &&
+      left.revision === right.revision &&
       left.valuePreview === right.valuePreview))
 
 const edgesEqual = (left: GraphEdge, right: GraphEdge) =>

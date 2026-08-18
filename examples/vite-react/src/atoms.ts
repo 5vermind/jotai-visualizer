@@ -11,3 +11,10 @@ export const countStatusAtom = atom((get) => {
   return count === 0 ? 'idle' : count > 0 ? 'positive' : 'negative'
 })
 countStatusAtom.debugLabel = 'countStatusAtom'
+
+export const privateDiagnosticsAtom = atom((get) => ({
+  count: get(countAtom),
+  source: 'internal',
+}))
+privateDiagnosticsAtom.debugLabel = 'privateDiagnosticsAtom'
+privateDiagnosticsAtom.debugPrivate = true

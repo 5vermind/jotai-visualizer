@@ -28,6 +28,7 @@ export type RuntimeStore = object
 
 export type RuntimeAtom = object & {
   debugLabel?: string
+  debugPrivate?: boolean
   toString(): string
 }
 
@@ -75,6 +76,10 @@ export const createRuntimeGraph = (
   const storeCollections = new WeakMap<RuntimeStore, StoreCollection>()
   const consumerCounts = new Map<string, number>()
   const consumerStoreIds = new Map<string, string>()
+  const atomRevisions = new Map<
+    string,
+    { revision: number; value: unknown }
+  >()
 
   const applyInternalPatch = (patch: GraphPatch) => {
     const result = graphStore.applyPatch(patch)
@@ -101,6 +106,16 @@ export const createRuntimeGraph = (
     const storeId = getStoreId(store)
     const label = getAtomLabel(atom)
     const previous = graphStore.getNode(id)
+    const previousRevision =
+      previous?.kind === 'atom' ? (previous.revision ?? 0) : 0
+    let revision = previousRevision
+    if (value.present) {
+      const atomRevision = atomRevisions.get(id)
+      revision = atomRevision
+        ? atomRevision.revision + (Object.is(atomRevision.value, value.value) ? 0 : 1)
+        : 0
+      atomRevisions.set(id, { revision, value: value.value })
+    }
     const valuePreview = value.present
       ? createValuePreview(
           value.value,
@@ -116,6 +131,8 @@ export const createRuntimeGraph = (
       id,
       storeId,
       label,
+      ...(atom.debugPrivate ? { private: true } : {}),
+      revision,
       ...(valuePreview === undefined ? {} : { valuePreview }),
     }
   }
@@ -146,12 +163,14 @@ export const createRuntimeGraph = (
     if (!previous) {
       return
     }
+    const removedNodeIds = [...previous.nodeIds].filter(
+      (nodeId) => !atomHasConsumer(nodeId),
+    )
     applyInternalPatch({
       removeEdgeIds: [...previous.edgeIds],
-      removeNodeIds: [...previous.nodeIds].filter(
-        (nodeId) => !atomHasConsumer(nodeId),
-      ),
+      removeNodeIds: removedNodeIds,
     })
+    removedNodeIds.forEach((nodeId) => atomRevisions.delete(nodeId))
     storeCollections.delete(store)
   }
 
@@ -257,6 +276,7 @@ export const createRuntimeGraph = (
       })
 
       applyInternalPatch({ removeNodeIds: atomNodeIds })
+      atomNodeIds.forEach((nodeId) => atomRevisions.delete(nodeId))
       const componentsToRemove = orphanComponentIds()
       if (componentsToRemove.length > 0) {
         applyInternalPatch({ removeNodeIds: componentsToRemove })
@@ -316,6 +336,7 @@ export const createRuntimeGraph = (
         upsertEdges,
         removeEdgeIds,
       })
+      removeNodeIds.forEach((nodeId) => atomRevisions.delete(nodeId))
       storeCollections.set(store, {
         nodeIds: nextNodeIds,
         edgeIds: nextEdgeIds,

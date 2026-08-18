@@ -1,6 +1,6 @@
 # Jotai Visualizer 프로젝트 로드맵
 
-> 상태: Active — M2 완료, M3 대기
+> 상태: Active — M3 완료, M4 대기
 > 기준일: 2026-08-18
 > 문서 역할: 구현 범위, 아키텍처, 단계별 완료 조건에 대한 단일 기준 문서
 
@@ -351,23 +351,37 @@ Dagre를 우선 검토하고 compound graph가 필요할 때 ELK로 확장한다
 
 **목표:** 수동 tracked hook을 사용하는 앱에서 유용한 graph UI를 제공한다.
 
+**상태:** 완료 (2026-08-18)
+
 산출물:
 
-- [ ] floating panel과 열기/닫기 UI
-- [ ] atom/component custom node
-- [ ] dependency/consumer edge
-- [ ] 검색, Store 필터, private atom 토글
-- [ ] node detail inspector
-- [ ] upstream/downstream highlight
-- [ ] atom 변경 highlight
-- [ ] layout과 사용자 node 위치 유지
+- [x] floating panel과 열기/닫기 UI
+- [x] atom/component custom node
+- [x] dependency/consumer edge
+- [x] 검색, Store 필터, private atom 토글
+- [x] node detail inspector
+- [x] upstream/downstream highlight
+- [x] atom 변경 highlight
+- [x] layout과 사용자 node 위치 유지
 
 완료 조건:
 
-- [ ] 100 node graph에서 탐색과 drag가 원활하다.
-- [ ] panel을 닫았을 때 불필요한 UI render가 발생하지 않는다.
-- [ ] keyboard navigation과 기본 접근성 검사를 통과한다.
-- [ ] application CSS와 Visualizer CSS가 충돌하지 않는다.
+- [x] 100 node graph에서 탐색과 drag가 원활하다.
+- [x] panel을 닫았을 때 불필요한 UI render가 발생하지 않는다.
+- [x] keyboard navigation과 기본 접근성 검사를 통과한다.
+- [x] application CSS와 Visualizer CSS가 충돌하지 않는다.
+
+검증 기록:
+
+- 100-node Dagre layout과 saved-position test
+- closed panel zero-subscription test
+- labeled controls, Escape, focus return test
+- Store/private/search filter model test
+- atom revision change class test
+- Chrome functional QA와 console error 확인
+- visual-verdict 93 / pass
+- [M3 Embedded Visualizer 문서](M3_EMBEDDED_VISUALIZER.md)
+- [ADR 0002](adr/0002-graph-renderer-and-layout.md)
 
 ### M4 — Automatic instrumentation
 
@@ -502,13 +516,13 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 
 다음 항목은 해당 milestone 시작 전에 ADR로 확정한다.
 
-1. 라이선스: MIT 우선 검토
-2. `jotai-devtools`를 runtime dependency로 재사용할지 여부
-3. graph UI에 `@xyflow/react`를 채택할지 여부
-4. layout engine으로 Dagre를 채택할지 여부
+1. 라이선스: MIT 채택 완료
+2. `jotai-devtools` 재사용: ADR 0001에서 M5까지 제한 승인
+3. graph UI: ADR 0002에서 `@xyflow/react` 채택
+4. layout engine: ADR 0002에서 Dagre 채택
 5. Babel transform을 독립 구현할지 기존 Jotai Babel plugin을 확장할지 여부
 6. 지원할 Jotai/React/Vite 최소 버전
-7. value preview의 기본 활성화 여부와 redaction API
+7. value preview: 기본 비활성화와 opt-in redaction 구현 완료
 
 ## 14. 진행 규칙
 
@@ -521,12 +535,12 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 
 ## 15. 다음 실행 항목
 
-현재 다음 작업은 **M3 — Embedded Visualizer MVP**다.
+현재 다음 작업은 **M4 — Automatic instrumentation**이다.
 
-1. graph renderer와 layout dependency를 ADR로 확정한다.
-2. floating panel과 atom/component custom node를 구현한다.
-3. 검색, Store 필터, private atom 토글을 연결한다.
-4. node detail과 upstream/downstream highlight를 구현한다.
-5. 100 node interaction과 기본 접근성을 검증한다.
+1. Babel transform boundary와 지원 syntax를 ADR로 확정한다.
+2. Jotai hook import와 component scope를 식별하는 fixture를 작성한다.
+3. tracked hook 호출과 source metadata를 자동 주입한다.
+4. Vite plugin, source map, HMR cleanup을 연결한다.
+5. production build에서 계측 코드 제거를 검증한다.
 
-M1 완료 전에는 브라우저 확장, time travel, 다중 bundler 지원을 시작하지 않는다.
+M4 완료 전에는 브라우저 확장, time travel, 다중 bundler 지원을 시작하지 않는다.
