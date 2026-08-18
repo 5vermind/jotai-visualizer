@@ -15,8 +15,8 @@ import { useRuntimeGraph } from './runtime-context.js'
 import type {
   ComponentMetadata,
   ConsumerAccess,
-  JotaiStore,
-} from './runtime-graph.js'
+} from '@jotai-visualizer/core'
+import type { JotaiStore } from './jotai-types.js'
 
 type StoreOptions = {
   store?: JotaiStore

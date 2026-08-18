@@ -26,7 +26,13 @@ import {
   useTrackedAtomValue,
 } from '@jotai-visualizer/react'
 
-const runtime = createRuntimeGraph()
+const runtime = createRuntimeGraph({
+  valuePreview: {
+    enabled: true,
+    redact: (_value, { atomLabel }) =>
+      /password|secret|token/i.test(atomLabel),
+  },
+})
 
 function CounterLabel() {
   const count = useTrackedAtomValue(countAtom, {
@@ -121,7 +127,7 @@ const json = runtime.getJsonSnapshot()
 - runtime package는 Store보다 먼저 import되어야 한다.
 - component metadata는 현재 수동으로 제공한다.
 - component instance가 아니라 metadata ID 단위로 합쳐진다.
-- 값 preview는 디버깅용 축약 표현이며 완전한 serializer가 아니다.
+- 값 preview는 opt-in 디버깅용 축약 표현이며 완전한 serializer가 아니다.
 - 한 Store에는 하나의 `JotaiGraphCollector`만 두는 것을 전제로 한다.
 - `jotai-devtools`의 private Jotai API 결합을 상속한다.
 - async atom과 atomFamily 정확도는 M5 범위다.

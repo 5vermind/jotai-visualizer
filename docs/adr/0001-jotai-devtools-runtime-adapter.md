@@ -1,6 +1,6 @@
 # ADR 0001: M1 atom inspector에 jotai-devtools utility를 제한적으로 재사용한다
 
-- 상태: Accepted for M1, M2에서 재검토 필수
+- 상태: Accepted through M3, M5 compatibility 단계에서 재검토
 - 결정일: 2026-08-18
 - 범위: `@jotai-visualizer/react`의 atom snapshot 수집
 
@@ -122,3 +122,15 @@ M2에서는 다음 중 하나를 명시적으로 선택한다.
 - import 이전에 생성된 Store 지원 가능성
 - Jotai minor/major 버전 compatibility test
 - async atom과 atomFamily 정확도
+
+## M2 재검토 결과
+
+M2에서 graph storage, identity, lifecycle, traversal, value policy를 모두
+`@jotai-visualizer/core`로 이동했다. `jotai-devtools` import는 계속
+`packages/react/src/jotai-devtools-adapter.tsx` 한 파일에만 남아 있어 adapter를
+교체해도 core와 UI 계약에는 영향을 주지 않는다.
+
+따라서 M3 UI 구현 전 별도 private adapter를 만드는 비용은 지불하지 않고 현재
+utility를 유지한다. 설치 의존성과 Store 생성 순서 문제는 해결된 것이 아니므로
+공개 호환성 범위를 확정하는 M5에서 async atom, atomFamily, Jotai version matrix와
+함께 다시 평가한다.

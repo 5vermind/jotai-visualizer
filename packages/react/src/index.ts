@@ -5,7 +5,7 @@ export {
   useRuntimeGraphSnapshot,
 } from './runtime-context.js'
 export { JotaiGraphCollector } from './jotai-devtools-adapter.js'
-export { createRuntimeGraph } from './runtime-graph.js'
+export { createRuntimeGraph } from '@jotai-visualizer/core'
 export {
   useTrackedAtom,
   useTrackedAtomValue,
@@ -15,6 +15,7 @@ export {
 export type {
   ComponentMetadata,
   ConsumerAccess,
-  JotaiStore,
   RuntimeGraph,
-} from './runtime-graph.js'
+  RuntimeGraphOptions,
+} from '@jotai-visualizer/core'
+export type { JotaiStore } from './jotai-types.js'

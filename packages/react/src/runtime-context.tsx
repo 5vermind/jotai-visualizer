@@ -7,8 +7,7 @@ import {
 } from 'react'
 
 import type { GraphSnapshot } from '@jotai-visualizer/core'
-
-import type { RuntimeGraph } from './runtime-graph.js'
+import type { RuntimeGraph } from '@jotai-visualizer/core'
 
 const RuntimeGraphContext = createContext<RuntimeGraph | undefined>(undefined)
 

@@ -51,6 +51,40 @@ export type GraphPatch = {
   removeEdgeIds?: readonly string[]
 }
 
+export type GraphValidationIssueCode =
+  | 'conflicting-operation'
+  | 'duplicate-id'
+  | 'empty-id'
+  | 'empty-label'
+  | 'invalid-access'
+  | 'invalid-endpoint-kind'
+  | 'kind-change'
+  | 'missing-endpoint'
+  | 'missing-store-id'
+
+export type GraphValidationIssue = {
+  code: GraphValidationIssueCode
+  message: string
+  path: string
+}
+
+export type ApplyGraphPatchResult =
+  | {
+      applied: true
+      changed: boolean
+      issues: readonly []
+    }
+  | {
+      applied: false
+      changed: false
+      issues: readonly GraphValidationIssue[]
+    }
+
+export type GraphTraversalOptions = {
+  direction: 'upstream' | 'downstream'
+  edgeKinds?: readonly GraphEdge['kind'][]
+}
+
 export const isAtomNode = (node: GraphNode): node is AtomNode =>
   node.kind === 'atom'
 

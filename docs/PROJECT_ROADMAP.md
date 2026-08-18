@@ -1,6 +1,6 @@
 # Jotai Visualizer 프로젝트 로드맵
 
-> 상태: Active — M1 완료, M2 대기
+> 상태: Active — M2 완료, M3 대기
 > 기준일: 2026-08-18
 > 문서 역할: 구현 범위, 아키텍처, 단계별 완료 조건에 대한 단일 기준 문서
 
@@ -318,21 +318,34 @@ Dagre를 우선 검토하고 compound graph가 필요할 때 ELK로 확장한다
 
 **목표:** UI나 특정 Jotai 버전에 종속되지 않는 graph registry를 완성한다.
 
+**상태:** 완료 (2026-08-18)
+
 산출물:
 
-- [ ] node/edge schema와 runtime validation 정책
-- [ ] Store/atom/component ID registry
-- [ ] ref-count 기반 consumer edge lifecycle
-- [ ] incremental `GraphPatch` API
-- [ ] graph snapshot과 subscription API
-- [ ] 값 preview와 redaction 정책
+- [x] node/edge schema와 runtime validation 정책
+- [x] Store/atom/component ID registry
+- [x] ref-count 기반 consumer edge lifecycle
+- [x] incremental `GraphPatch` API
+- [x] graph snapshot과 subscription API
+- [x] 값 preview와 redaction 정책
 
 완료 조건:
 
-- [ ] 같은 patch를 반복 적용해도 중복 node/edge가 생기지 않는다.
-- [ ] Store가 해제되면 관련 graph 데이터도 제거된다.
-- [ ] 원형 graph를 무한 순회하지 않는다.
-- [ ] core unit test가 lifecycle과 edge 변경을 보호한다.
+- [x] 같은 patch를 반복 적용해도 중복 node/edge가 생기지 않는다.
+- [x] Store가 해제되면 관련 graph 데이터도 제거된다.
+- [x] 원형 graph를 무한 순회하지 않는다.
+- [x] core unit test가 lifecycle과 edge 변경을 보호한다.
+
+검증 기록:
+
+- atomic invalid patch rejection과 idempotent notification test
+- node 제거 시 연결 edge cascade test
+- cycle-safe upstream/downstream traversal test
+- consumer ref-count와 Store release lifecycle test
+- preview opt-in, redaction, truncation test
+- 기존 M1 React/Jotai integration regression test
+- [Graph Core 계약](GRAPH_CORE.md)
+- [M2 구현 계획](M2_IMPLEMENTATION_PLAN.md)
 
 ### M3 — Embedded Visualizer MVP
 
@@ -508,12 +521,12 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 
 ## 15. 다음 실행 항목
 
-현재 다음 작업은 **M2 — Graph Core**다.
+현재 다음 작업은 **M3 — Embedded Visualizer MVP**다.
 
-1. M1 runtime registry를 framework-independent core로 이동한다.
-2. `GraphPatch` 적용과 중복 제거 규칙을 구현한다.
-3. Store/atom/component ID lifecycle을 명시적으로 관리한다.
-4. snapshot subscription과 runtime validation 정책을 확정한다.
-5. ADR 0001의 adapter 재사용 결정을 다시 평가한다.
+1. graph renderer와 layout dependency를 ADR로 확정한다.
+2. floating panel과 atom/component custom node를 구현한다.
+3. 검색, Store 필터, private atom 토글을 연결한다.
+4. node detail과 upstream/downstream highlight를 구현한다.
+5. 100 node interaction과 기본 접근성을 검증한다.
 
 M1 완료 전에는 브라우저 확장, time travel, 다중 bundler 지원을 시작하지 않는다.

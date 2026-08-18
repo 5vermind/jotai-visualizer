@@ -15,7 +15,7 @@ Jotai의 atom, atom 간 의존성, 그리고 atom을 소비하는 React 컴포�
 
 ## 현재 상태
 
-M1 런타임 가능성 검증을 완료했으며 M2 Graph Core 구현을 준비하고 있습니다.
+M2 Graph Core 구현을 완료했으며 M3 Embedded Visualizer를 준비하고 있습니다.
 구현 범위, 아키텍처, 단계별 완료 조건은
 [프로젝트 로드맵](docs/PROJECT_ROADMAP.md)을 기준으로 관리합니다.
 
@@ -65,6 +65,8 @@ pnpm dev
 
 - [프로젝트 로드맵](docs/PROJECT_ROADMAP.md)
 - [M1 Runtime Spike 사용법](docs/M1_RUNTIME_SPIKE.md)
+- [Graph Core 계약](docs/GRAPH_CORE.md)
+- [M2 구현 계획 및 결과](docs/M2_IMPLEMENTATION_PLAN.md)
 - [ADR 0001: jotai-devtools runtime adapter](docs/adr/0001-jotai-devtools-runtime-adapter.md)
 - [기여 가이드](CONTRIBUTING.md)
 

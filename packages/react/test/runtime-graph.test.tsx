@@ -56,7 +56,7 @@ describe('Jotai runtime graph spike', () => {
       'selectedAtom',
     )
     const store = createStore()
-    const runtime = createRuntimeGraph()
+    const runtime = createRuntimeGraph({ valuePreview: { enabled: true } })
 
     function ConditionalReader() {
       useTrackedAtomValue(selectedAtom, {
@@ -97,7 +97,7 @@ describe('Jotai runtime graph spike', () => {
       'trackedDoubledAtom',
     )
     const store = createStore()
-    const runtime = createRuntimeGraph()
+    const runtime = createRuntimeGraph({ valuePreview: { enabled: true } })
 
     function Consumers() {
       useTrackedAtomValue(countAtom, {
@@ -160,7 +160,7 @@ describe('Jotai runtime graph spike', () => {
     const sharedAtom = labelAtom(atom(0), 'sharedAcrossStoresAtom')
     const defaultStore = getDefaultStore()
     const customStore = createStore()
-    const runtime = createRuntimeGraph()
+    const runtime = createRuntimeGraph({ valuePreview: { enabled: true } })
     defaultStore.set(sharedAtom, 1)
     customStore.set(sharedAtom, 7)
 
@@ -242,7 +242,7 @@ describe('Jotai runtime graph spike', () => {
     const promiseAtom = labelAtom(atom(Promise.resolve('done')), 'promiseAtom')
     const errorAtom = labelAtom(atom(new Error('failed')), 'errorAtom')
     const store = createStore()
-    const runtime = createRuntimeGraph()
+    const runtime = createRuntimeGraph({ valuePreview: { enabled: true } })
 
     runtime.syncAtomSnapshot(store, {
       values: new Map<Atom<unknown>, unknown>([

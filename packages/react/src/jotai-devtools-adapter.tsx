@@ -4,7 +4,7 @@ import { useStore, type Atom } from 'jotai'
 import { useAtomsSnapshot } from 'jotai-devtools/utils'
 
 import { useRuntimeGraph } from './runtime-context.js'
-import type { JotaiStore } from './runtime-graph.js'
+import type { JotaiStore } from './jotai-types.js'
 
 type AnyAtom = Atom<unknown>
 

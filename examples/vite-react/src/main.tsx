@@ -19,7 +19,13 @@ if (!root) {
   throw new Error('Root element was not found')
 }
 
-const runtime = createRuntimeGraph()
+const runtime = createRuntimeGraph({
+  valuePreview: {
+    enabled: true,
+    redact: (_value, { atomLabel }) =>
+      /password|secret|token/i.test(atomLabel),
+  },
+})
 const customStore = createStore()
 customStore.set(countAtom, 10)
 
