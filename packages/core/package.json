@@ -1,21 +1,58 @@
 {
   "name": "@jotai-visualizer/core",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Framework-independent graph model for Jotai Visualizer.",
   "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
       "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "import": "./dist/index.js"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "build": "node ../../scripts/clean-package-dist.mjs && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "pnpm build"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./src/index.ts",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20.18.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/5vermind/jotai-visualizer.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/5vermind/jotai-visualizer#readme",
+  "bugs": {
+    "url": "https://github.com/5vermind/jotai-visualizer/issues"
+  },
+  "keywords": [
+    "jotai",
+    "react",
+    "devtools",
+    "visualization"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    }
   }
 }

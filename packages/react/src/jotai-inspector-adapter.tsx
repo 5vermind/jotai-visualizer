@@ -1,12 +1,8 @@
 import { useEffect } from 'react'
 
-import { useStore, type Atom } from 'jotai'
-import { useAtomsSnapshot } from 'jotai-devtools/utils'
-
 import { useRuntimeGraph } from './runtime-context.js'
+import { useInspectorSnapshot } from './jotai-inspector.js'
 import type { JotaiStore } from './jotai-types.js'
-
-type AnyAtom = Atom<unknown>
 
 export function JotaiGraphCollector({
   shouldShowPrivateAtoms = true,
@@ -16,20 +12,13 @@ export function JotaiGraphCollector({
   store?: JotaiStore
 }) {
   const runtime = useRuntimeGraph()
-  const resolvedStore = useStore({ store })
-  const snapshot = useAtomsSnapshot({
+  const { resolvedStore, snapshot } = useInspectorSnapshot(
+    store,
     shouldShowPrivateAtoms,
-    store: resolvedStore,
-  })
+  )
 
   useEffect(() => {
-    runtime.syncAtomSnapshot(resolvedStore, {
-      values: snapshot.values as ReadonlyMap<AnyAtom, unknown>,
-      dependents: snapshot.dependents as ReadonlyMap<
-        AnyAtom,
-        ReadonlySet<AnyAtom>
-      >,
-    })
+    runtime.syncAtomSnapshot(resolvedStore, snapshot)
   }, [resolvedStore, runtime, snapshot])
 
   useEffect(

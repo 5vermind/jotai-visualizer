@@ -16,12 +16,12 @@ import {
   JotaiGraphCollector,
   RuntimeGraphProvider,
   createRuntimeGraph,
-  registerVisualizerModule,
   useTrackedAtom,
   useTrackedAtomValue,
   useTrackedSetAtom,
   type RuntimeGraph,
 } from '../src/index.js'
+import { registerVisualizerModule } from '../src/instrumentation.js'
 
 afterEach(() => {
   cleanup()

@@ -12,7 +12,7 @@ export {
   useTrackedAtom,
   useTrackedAtomValue,
   useTrackedSetAtom,
-} from '@jotai-visualizer/react'
+} from '@jotai-visualizer/react/instrumentation'
 `
 
 export type JotaiVisualizerViteOptions = {

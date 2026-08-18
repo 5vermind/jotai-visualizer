@@ -88,7 +88,7 @@ Preview는 기본 비활성화이며 redaction callback을 먼저 적용한다.
 
 ## Version 제한 이유
 
-- Jotai DevTools `0.14.0`이 Jotai `2.20.0` 이상의 private Rev3 store API를
+- Built-in headless inspector가 Jotai `2.20.0` 이상의 private Rev3 store API를
   사용한다.
 - Jotai 3은 private API compatibility가 검증되지 않았다.
 - Vite 6.0은 현재 Vitest 4 module runner와 호환되지 않아 하한을 6.4로 둔다.

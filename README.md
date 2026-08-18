@@ -15,7 +15,9 @@ Jotai의 atom, atom 간 의존성, 그리고 atom을 소비하는 React 컴포�
 
 ## 현재 상태
 
-M5 호환성 및 성능 검증을 완료했으며 M6 첫 오픈소스 릴리스를 준비하고 있습니다.
+`v0.1.0` 첫 오픈소스 preview를 준비했습니다. GitHub Release는 검증된 package
+tarball을 제공하며 npm registry publish는 `@jotai-visualizer` organization 설정 후
+활성화됩니다.
 구현 범위, 아키텍처, 단계별 완료 조건은
 [프로젝트 로드맵](docs/PROJECT_ROADMAP.md)을 기준으로 관리합니다.
 
@@ -83,6 +85,7 @@ pnpm dev
 
 - `pnpm check`: lint, typecheck, test, build 전체 검증
 - `pnpm dev`: Vite + React + Jotai 개발 example 실행
+- `pnpm release:verify`: 전체 검증, package pack/audit, fresh consumer 설치
 
 ## 문서
 
@@ -94,9 +97,14 @@ pnpm dev
 - [M4 Automatic Instrumentation](docs/M4_AUTOMATIC_INSTRUMENTATION.md)
 - [Compatibility matrix](docs/COMPATIBILITY.md)
 - [Performance budgets](docs/PERFORMANCE.md)
+- [Installation](docs/INSTALLATION.md)
+- [Public API](docs/PUBLIC_API.md)
+- [Privacy](docs/PRIVACY.md)
+- [Security policy](SECURITY.md)
+- [Releasing](docs/RELEASING.md)
 - [ADR 0003: development-only Babel instrumentation](docs/adr/0003-development-only-babel-instrumentation.md)
 - [ADR 0002: graph renderer와 layout](docs/adr/0002-graph-renderer-and-layout.md)
-- [ADR 0001: jotai-devtools runtime adapter](docs/adr/0001-jotai-devtools-runtime-adapter.md)
+- [ADR 0001: inspector adapter evolution](docs/adr/0001-jotai-devtools-runtime-adapter.md)
 - [기여 가이드](CONTRIBUTING.md)
 
 ## 라이선스

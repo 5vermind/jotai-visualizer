@@ -1,0 +1,49 @@
+name: Publish npm packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Git tag to publish
+        required: true
+        default: v0.1.0
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - name: Check out release tag
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Set up Node.js for npm provenance
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify and pack release
+        run: pnpm release:verify
+
+      - name: Publish packages with provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish ./release/jotai-visualizer-core-0.1.0.tgz --access public --provenance
+          npm publish ./release/jotai-visualizer-ui-0.1.0.tgz --access public --provenance
+          npm publish ./release/jotai-visualizer-react-0.1.0.tgz --access public --provenance
+          npm publish ./release/jotai-visualizer-babel-plugin-0.1.0.tgz --access public --provenance
+          npm publish ./release/jotai-visualizer-vite-0.1.0.tgz --access public --provenance

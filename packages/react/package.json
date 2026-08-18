@@ -1,27 +1,32 @@
 {
   "name": "@jotai-visualizer/react",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "React runtime instrumentation for Jotai Visualizer.",
   "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
       "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "import": "./dist/index.js"
+    },
+    "./instrumentation": {
+      "types": "./src/instrumentation.ts",
+      "import": "./dist/instrumentation.js"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "build": "node ../../scripts/clean-package-dist.mjs && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "pnpm build"
   },
   "dependencies": {
-    "@jotai-visualizer/core": "workspace:*",
-    "@jotai-visualizer/ui": "workspace:*",
-    "jotai-devtools": "0.14.0"
+    "@jotai-visualizer/core": "workspace:^",
+    "@jotai-visualizer/ui": "workspace:^"
   },
   "peerDependencies": {
     "jotai": ">=2.20.0 <3.0.0",
@@ -35,5 +40,44 @@
     "jotai": "2.20.2",
     "react": "19.2.8",
     "react-dom": "19.2.8"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./src/index.ts",
+  "sideEffects": true,
+  "engines": {
+    "node": ">=20.18.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/5vermind/jotai-visualizer.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/5vermind/jotai-visualizer#readme",
+  "bugs": {
+    "url": "https://github.com/5vermind/jotai-visualizer/issues"
+  },
+  "keywords": [
+    "jotai",
+    "react",
+    "devtools",
+    "visualization"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "./instrumentation": {
+        "types": "./dist/instrumentation.d.ts",
+        "import": "./dist/instrumentation.js"
+      }
+    }
   }
 }

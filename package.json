@@ -1,6 +1,6 @@
 {
   "name": "jotai-visualizer-workspace",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Visualize Jotai atoms, dependencies, and React consumers as a graph.",
   "license": "MIT",
@@ -17,6 +17,8 @@
     "benchmark:graph": "node scripts/benchmark-graph.mjs",
     "dev": "pnpm --filter @jotai-visualizer/example-vite-react dev",
     "lint": "eslint .",
+    "pack:release": "node scripts/pack-packages.mjs",
+    "release:verify": "pnpm check && pnpm pack:release && node scripts/verify-tarballs.mjs && node scripts/verify-consumer-install.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "pnpm --recursive --if-present run typecheck",
@@ -31,5 +33,20 @@
     "typescript-eslint": "8.50.0",
     "vite": "6.4.3",
     "vitest": "4.1.10"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/5vermind/jotai-visualizer.git"
+  },
+  "homepage": "https://github.com/5vermind/jotai-visualizer#readme",
+  "bugs": {
+    "url": "https://github.com/5vermind/jotai-visualizer/issues"
+  },
+  "keywords": [
+    "jotai",
+    "react",
+    "devtools",
+    "visualization",
+    "state-management"
+  ]
 }

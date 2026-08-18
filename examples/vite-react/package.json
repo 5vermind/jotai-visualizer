@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc --noEmit && vite build",
     "dev": "vite",
-    "predev": "pnpm --filter @jotai-visualizer/babel-plugin build && pnpm --filter @jotai-visualizer/vite build",
+    "predev": "pnpm --filter @jotai-visualizer/react... build && pnpm --filter @jotai-visualizer/vite... build",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

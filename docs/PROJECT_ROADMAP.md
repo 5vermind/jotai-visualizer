@@ -462,21 +462,33 @@ Dagre를 우선 검토하고 compound graph가 필요할 때 ELK로 확장한다
 **목표:** 외부 사용자가 설치하고 문제를 재현하며 기여할 수 있는 첫 버전을
 배포한다.
 
+**상태:** Release candidate — GitHub `v0.1.0` tag 대기
+
 산출물:
 
-- [ ] 설치 및 사용 문서
-- [ ] example과 demo
-- [ ] package별 public API 검토
-- [ ] changeset 또는 release workflow
-- [ ] security/privacy 문서
+- [x] 설치 및 사용 문서
+- [x] example과 demo
+- [x] package별 public API 검토
+- [x] changeset 또는 release workflow
+- [x] security/privacy 문서
 - [ ] `0.1.0` release
 
 완료 조건:
 
-- [ ] 문서의 설치 예제를 새 프로젝트에서 재현한다.
-- [ ] package가 production tree-shaking 검증을 통과한다.
-- [ ] 공개 API와 내부 API가 명확히 구분된다.
-- [ ] 최소 한 개의 실제 애플리케이션에서 dogfooding한다.
+- [x] 문서의 설치 예제를 새 프로젝트에서 재현한다.
+- [x] package가 production tree-shaking 검증을 통과한다.
+- [x] 공개 API와 내부 API가 명확히 구분된다.
+- [x] 최소 한 개의 실제 애플리케이션에서 dogfooding한다.
+
+Release candidate 검증:
+
+- 5개 `0.1.0` dist-only tarball 생성과 content audit
+- tarball fresh consumer TypeScript/dev transform/production build
+- root Vite example dogfooding
+- GitHub tag release workflow와 npm provenance workflow
+- [Installation](INSTALLATION.md)
+- [Public API](PUBLIC_API.md)
+- [Security](../SECURITY.md)와 [Privacy](PRIVACY.md)
 
 ## 10. 후속 후보
 
@@ -547,7 +559,7 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 다음 항목은 해당 milestone 시작 전에 ADR로 확정한다.
 
 1. 라이선스: MIT 채택 완료
-2. `jotai-devtools` 재사용: ADR 0001에서 M5까지 제한 승인
+2. `jotai-devtools` 재사용: ADR 0001의 M6 결정으로 built-in headless adapter 전환
 3. graph UI: ADR 0002에서 `@xyflow/react` 채택
 4. layout engine: ADR 0002에서 Dagre 채택
 5. Babel transform: ADR 0003에서 독립 Babel 7 plugin 구현

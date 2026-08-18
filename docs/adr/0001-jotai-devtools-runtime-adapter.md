@@ -1,6 +1,6 @@
 # ADR 0001: M1 atom inspector에 jotai-devtools utility를 제한적으로 재사용한다
 
-- 상태: Accepted for 0.1 with Jotai `>=2.20 <3`
+- 상태: Superseded in M6 by the built-in headless inspector
 - 결정일: 2026-08-18
 - 범위: `@jotai-visualizer/react`의 atom snapshot 수집
 
@@ -145,3 +145,21 @@ nested Provider, multiple Store integration이 통과했다. Core/UI가 adapter�
 대신 peer range를 Jotai `>=2.20.0 <3.0.0`으로 제한한다. Jotai 3 지원은 private
 store API 변경을 확인하고 versioned adapter 또는 upstream headless inspector를
 검토한 뒤 별도 결정한다.
+
+## M6 superseding decision
+
+Fresh tarball consumer의 strict peer install에서 `jotai-devtools`가 사용하지 않는
+`react-json-tree` UI dependency를 통해 React 19 peer 오류를 발생시켰다. 공개
+runtime package에 UI dependency와 peer 예외를 전가하지 않기 위해 필요한 mounted
+atom/dependent 수집만 `packages/react/src/jotai-inspector.ts`에 구현했다.
+
+결과:
+
+- `jotai-devtools` runtime dependency 제거
+- 약 45개 transitive package 제거
+- Redux와 React 19 peer 예외 제거
+- `jsondiffpatch` security override 제거
+- 동일 Jotai private Rev3 API 결합은 built-in adapter 한 파일로 격리
+
+따라서 이 ADR의 재사용 결정은 superseded되었지만 M1~M5에서 해당 선택을 했던
+근거와 관찰 결과를 보존하기 위해 문서를 유지한다.

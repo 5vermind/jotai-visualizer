@@ -1,7 +1,6 @@
 {
   "name": "@jotai-visualizer/babel-plugin",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Development-time Jotai hook instrumentation for Jotai Visualizer.",
   "license": "MIT",
   "type": "module",
@@ -12,11 +11,14 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "build": "node ../../scripts/clean-package-dist.mjs && tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepack": "pnpm build"
   },
   "dependencies": {
     "@babel/types": "7.29.8"
@@ -28,5 +30,40 @@
     "@babel/core": "7.29.7",
     "@types/babel__core": "7.20.5",
     "@types/node": "20.19.43"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./src/index.ts",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20.18.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/5vermind/jotai-visualizer.git",
+    "directory": "packages/babel-plugin"
+  },
+  "homepage": "https://github.com/5vermind/jotai-visualizer#readme",
+  "bugs": {
+    "url": "https://github.com/5vermind/jotai-visualizer/issues"
+  },
+  "keywords": [
+    "jotai",
+    "react",
+    "devtools",
+    "visualization"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true,
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      }
+    }
   }
 }
