@@ -63,6 +63,19 @@ main {
   line-height: 1.7;
 }
 
+.scope + .scope {
+  margin-top: 3rem;
+}
+
+.scope-heading {
+  margin-bottom: 1rem;
+}
+
+.scope-heading h2 {
+  margin: 0.3rem 0 0;
+  font-size: 1.75rem;
+}
+
 .eyebrow {
   margin: 0;
   color: #bcaefa;

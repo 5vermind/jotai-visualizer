@@ -1,0 +1,38 @@
+{
+  "name": "@jotai-visualizer/react",
+  "version": "0.0.0",
+  "private": true,
+  "description": "React runtime instrumentation for Jotai Visualizer.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@jotai-visualizer/core": "workspace:*",
+    "jotai-devtools": "0.14.0"
+  },
+  "peerDependencies": {
+    "jotai": ">=2.20.0",
+    "react": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/react": "16.3.2",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "jotai": "2.20.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  }
+}

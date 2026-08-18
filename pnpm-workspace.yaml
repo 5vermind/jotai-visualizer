@@ -2,7 +2,20 @@ packages:
   - packages/*
   - examples/*
 
+overrides:
+  "jotai-devtools>jsondiffpatch": "0.7.6"
+
 # Vite requires esbuild's platform binary. Keep dependency lifecycle scripts
 # denied by default and allow only this reviewed build step.
 onlyBuiltDependencies:
   - esbuild
+
+# M1 imports only jotai-devtools/utils. Its bundled UI dependencies still
+# declare outdated React peers and an unused Redux peer, so keep the exception
+# scoped to those transitive packages instead of disabling strict peer checks.
+peerDependencyRules:
+  ignoreMissing:
+    - redux
+  allowedVersions:
+    "react-json-tree>react": "19"
+    "react-json-tree>@types/react": "19"

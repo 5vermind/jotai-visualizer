@@ -1,9 +1,16 @@
-import { useAtom, useAtomValue } from 'jotai'
+import {
+  useTrackedAtom,
+  useTrackedAtomValue,
+} from '@jotai-visualizer/react'
 
 import { countAtom, countStatusAtom, doubledCountAtom } from './atoms.js'
 
-function Counter() {
-  const [count, setCount] = useAtom(countAtom)
+function Counter({ scope }: { scope: string }) {
+  const [count, setCount] = useTrackedAtom(countAtom, {
+    id: `src/App.tsx#${scope}Counter`,
+    name: `${scope} Counter`,
+    file: 'examples/vite-react/src/App.tsx',
+  })
 
   return (
     <section className="card" aria-labelledby="counter-title">
@@ -29,9 +36,17 @@ function Counter() {
   )
 }
 
-function DerivedSummary() {
-  const doubledCount = useAtomValue(doubledCountAtom)
-  const status = useAtomValue(countStatusAtom)
+function DerivedSummary({ scope }: { scope: string }) {
+  const doubledCount = useTrackedAtomValue(doubledCountAtom, {
+    id: `src/App.tsx#${scope}DerivedSummary`,
+    name: `${scope} DerivedSummary`,
+    file: 'examples/vite-react/src/App.tsx',
+  })
+  const status = useTrackedAtomValue(countStatusAtom, {
+    id: `src/App.tsx#${scope}DerivedSummary`,
+    name: `${scope} DerivedSummary`,
+    file: 'examples/vite-react/src/App.tsx',
+  })
 
   return (
     <section className="card" aria-labelledby="summary-title">
@@ -53,21 +68,19 @@ function DerivedSummary() {
   )
 }
 
-export function App() {
+export function App({ scope }: { scope: string }) {
+  const scopeId = scope.toLowerCase().replaceAll(' ', '-')
+
   return (
-    <main>
-      <header className="hero">
-        <p className="eyebrow">M0 development fixture</p>
-        <h1>Jotai Visualizer</h1>
-        <p>
-          This app provides a small atom graph for validating runtime collection
-          in the next milestone.
-        </p>
-      </header>
-      <div className="grid">
-        <Counter />
-        <DerivedSummary />
+    <section className="scope" aria-labelledby={`${scopeId}-title`}>
+      <div className="scope-heading">
+        <p className="eyebrow">Independent Jotai state scope</p>
+        <h2 id={`${scopeId}-title`}>{scope}</h2>
       </div>
-    </main>
+      <div className="grid">
+        <Counter scope={scope} />
+        <DerivedSummary scope={scope} />
+      </div>
+    </section>
   )
 }

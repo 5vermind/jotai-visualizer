@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@jotai-visualizer/react": "workspace:*",
     "jotai": "2.20.2",
     "react": "19.2.8",
     "react-dom": "19.2.8"

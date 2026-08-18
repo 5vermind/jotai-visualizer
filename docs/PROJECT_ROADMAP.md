@@ -1,6 +1,6 @@
 # Jotai Visualizer 프로젝트 로드맵
 
-> 상태: Active — M0 완료, M1 대기
+> 상태: Active — M1 완료, M2 대기
 > 기준일: 2026-08-18
 > 문서 역할: 구현 범위, 아키텍처, 단계별 완료 조건에 대한 단일 기준 문서
 
@@ -286,21 +286,33 @@ Dagre를 우선 검토하고 compound graph가 필요할 때 ELK로 확장한다
 **목표:** atom graph와 component consumer graph를 실제 런타임에서 수집할 수
 있는지 최소 코드로 증명한다.
 
+**상태:** 완료 (2026-08-18)
+
 산출물:
 
-- [ ] primitive atom과 derived atom dependency 수집
-- [ ] 수동 `useTrackedAtom*` hook 구현
-- [ ] component read/write 관계 수집
-- [ ] console 또는 JSON graph snapshot 출력
-- [ ] provider-less/custom Store 각각의 example
-- [ ] `jotai-devtools` 재사용 여부에 대한 ADR 작성
+- [x] primitive atom과 derived atom dependency 수집
+- [x] 수동 `useTrackedAtom*` hook 구현
+- [x] component read/write 관계 수집
+- [x] console 또는 JSON graph snapshot 출력
+- [x] provider-less/custom Store 각각의 example
+- [x] `jotai-devtools` 재사용 여부에 대한 ADR 작성
 
 완료 조건:
 
-- [ ] 조건부 derived dependency가 바뀌면 graph도 바뀐다.
-- [ ] component unmount 후 소비 edge가 제거된다.
-- [ ] custom Store의 graph가 서로 섞이지 않는다.
-- [ ] 기술적으로 불가능하거나 private API가 필요한 경계가 문서화된다.
+- [x] 조건부 derived dependency가 바뀌면 graph도 바뀐다.
+- [x] component unmount 후 소비 edge가 제거된다.
+- [x] custom Store의 graph가 서로 섞이지 않는다.
+- [x] 기술적으로 불가능하거나 private API가 필요한 경계가 문서화된다.
+
+검증 기록:
+
+- 조건부 dependency 변경 integration test
+- StrictMode에서 read/write/read-write consumer lifecycle test
+- provider-less/custom Store 격리 및 JSON snapshot test
+- `pnpm check`
+- `pnpm audit --prod`
+- [M1 Runtime Spike 문서](M1_RUNTIME_SPIKE.md)
+- [ADR 0001](adr/0001-jotai-devtools-runtime-adapter.md)
 
 ### M2 — Graph Core
 
@@ -496,12 +508,12 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 
 ## 15. 다음 실행 항목
 
-현재 다음 작업은 **M1 — Runtime feasibility spike**다.
+현재 다음 작업은 **M2 — Graph Core**다.
 
-1. `jotai-devtools` snapshot 재사용 가능성을 코드로 검증한다.
-2. primitive/derived atom 관계를 JSON graph snapshot으로 변환한다.
-3. 수동 `useTrackedAtom*` hook으로 component 소비 관계를 수집한다.
-4. provider-less/custom Store 격리 example과 test를 추가한다.
-5. 재사용 또는 독립 adapter 결정 사항을 ADR로 기록한다.
+1. M1 runtime registry를 framework-independent core로 이동한다.
+2. `GraphPatch` 적용과 중복 제거 규칙을 구현한다.
+3. Store/atom/component ID lifecycle을 명시적으로 관리한다.
+4. snapshot subscription과 runtime validation 정책을 확정한다.
+5. ADR 0001의 adapter 재사용 결정을 다시 평가한다.
 
 M1 완료 전에는 브라우저 확장, time travel, 다중 bundler 지원을 시작하지 않는다.
