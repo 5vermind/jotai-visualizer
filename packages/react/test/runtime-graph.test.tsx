@@ -10,19 +10,23 @@ import {
   getDefaultStore,
   type Atom,
 } from 'jotai'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import {
   JotaiGraphCollector,
   RuntimeGraphProvider,
   createRuntimeGraph,
+  registerVisualizerModule,
   useTrackedAtom,
   useTrackedAtomValue,
   useTrackedSetAtom,
   type RuntimeGraph,
 } from '../src/index.js'
 
-afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+  vi.useRealTimers()
+})
 
 const labelAtom = <Target extends Atom<unknown>>(target: Target, label: string) => {
   target.debugLabel = label
@@ -265,5 +269,79 @@ describe('Jotai runtime graph spike', () => {
     expect(previews.get('bigintAtom')).toBe('12')
     expect(previews.get('promiseAtom')).toBe('[Promise]')
     expect(previews.get('errorAtom')).toBe('Error: failed')
+  })
+
+  it('removes stale file consumers when an HMR module is not replaced', () => {
+    vi.useFakeTimers()
+    const runtime = createRuntimeGraph()
+    const store = createStore()
+    const countAtom = labelAtom(atom(0), 'hmrCountAtom')
+    runtime.registerConsumer({
+      store,
+      atom: countAtom,
+      component: {
+        id: 'src/HmrCounter.tsx#HmrCounter',
+        name: 'HmrCounter',
+        file: 'src/HmrCounter.tsx',
+      },
+      access: 'read',
+    })
+    let dispose: (() => void) | undefined
+    registerVisualizerModule(
+      {
+        dispose(callback) {
+          dispose = callback
+        },
+      },
+      'src/HmrCounter.tsx',
+    )
+    render(
+      <RuntimeGraphProvider runtime={runtime}>
+        <div />
+      </RuntimeGraphProvider>,
+    )
+
+    expect(runtime.getSnapshot().edges).toHaveLength(1)
+    act(() => dispose?.())
+    expect(runtime.getSnapshot().edges).toHaveLength(1)
+    act(() => vi.advanceTimersByTime(250))
+    expect(runtime.getSnapshot()).toEqual({ nodes: [], edges: [] })
+    vi.useRealTimers()
+  })
+
+  it('cancels stale cleanup when the replacement HMR module registers', () => {
+    vi.useFakeTimers()
+    const runtime = createRuntimeGraph()
+    const store = createStore()
+    const countAtom = labelAtom(atom(0), 'preservedHmrAtom')
+    runtime.registerConsumer({
+      store,
+      atom: countAtom,
+      component: {
+        id: 'src/Preserved.tsx#Preserved',
+        name: 'Preserved',
+        file: 'src/Preserved.tsx',
+      },
+      access: 'read',
+    })
+    let dispose: (() => void) | undefined
+    const hot = {
+      dispose(callback: () => void) {
+        dispose = callback
+      },
+    }
+    registerVisualizerModule(hot, 'src/Preserved.tsx')
+    render(
+      <RuntimeGraphProvider runtime={runtime}>
+        <div />
+      </RuntimeGraphProvider>,
+    )
+
+    act(() => dispose?.())
+    registerVisualizerModule(hot, 'src/Preserved.tsx')
+    act(() => vi.advanceTimersByTime(500))
+
+    expect(runtime.getSnapshot().edges).toHaveLength(1)
+    vi.useRealTimers()
   })
 })

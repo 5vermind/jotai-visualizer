@@ -15,9 +15,10 @@ pnpm dev
 테스트 앱에는 default Store와 custom Store가 함께 있으며 각각의 Counter를
 독립적으로 변경할 수 있다.
 
-## 현재 수동 통합
+## 수동 통합 API
 
-M4 자동 계측 전에는 tracked hook과 Collector를 사용한다.
+M4 이후 Vite 사용자는 자동 계측을 사용할 수 있다. 아래 API는 Vite를 사용하지
+않거나 일부 unsupported pattern을 직접 계측할 때 계속 사용할 수 있다.
 
 ```tsx
 import {

@@ -15,16 +15,25 @@ Jotai의 atom, atom 간 의존성, 그리고 atom을 소비하는 React 컴포�
 
 ## 현재 상태
 
-M3 Embedded Visualizer MVP를 완료했으며 M4 자동 계측을 준비하고 있습니다.
+M4 자동 계측을 완료했으며 M5 호환성 및 성능 검증을 준비하고 있습니다.
 구현 범위, 아키텍처, 단계별 완료 조건은
 [프로젝트 로드맵](docs/PROJECT_ROADMAP.md)을 기준으로 관리합니다.
 
 ## 현재 개발 버전 사용법
 
-M4 자동 계측 전에는 Runtime provider, Store collector, tracked hook을 수동으로
-연결합니다.
+Vite plugin이 일반 Jotai hook에 component metadata를 자동으로 주입합니다.
+
+```ts
+// vite.config.ts
+import jotaiVisualizer from '@jotai-visualizer/vite'
+
+export default defineConfig({
+  plugins: [jotaiVisualizer(), react()],
+})
+```
 
 ```tsx
+// DevRoot.tsx
 import {
   JotaiGraphCollector,
   JotaiVisualizer,
@@ -34,18 +43,30 @@ import {
 
 const runtime = createRuntimeGraph()
 
-function Root() {
-  return import.meta.env.DEV ? (
+export function DevRoot() {
+  return (
     <RuntimeGraphProvider runtime={runtime}>
       <JotaiGraphCollector />
       <Application />
       <JotaiVisualizer />
     </RuntimeGraphProvider>
-  ) : (
-    <Application />
   )
 }
 ```
+
+```tsx
+// main.tsx
+if (import.meta.env.DEV) {
+  void import('./DevRoot.js').then(({ DevRoot }) => {
+    root.render(<DevRoot />)
+  })
+} else {
+  root.render(<Application />)
+}
+```
+
+Dev root를 dynamic import해야 production bundle에서 Visualizer UI와 CSS까지
+제거됩니다.
 
 초기 버전은 애플리케이션 내부의 floating panel로 제공하고, 브라우저 확장은
 런타임 Collector와 UI가 안정된 이후 별도 transport로 확장합니다.
@@ -70,6 +91,8 @@ pnpm dev
 - [Graph Core 계약](docs/GRAPH_CORE.md)
 - [M2 구현 계획 및 결과](docs/M2_IMPLEMENTATION_PLAN.md)
 - [M3 Embedded Visualizer 사용법](docs/M3_EMBEDDED_VISUALIZER.md)
+- [M4 Automatic Instrumentation](docs/M4_AUTOMATIC_INSTRUMENTATION.md)
+- [ADR 0003: development-only Babel instrumentation](docs/adr/0003-development-only-babel-instrumentation.md)
 - [ADR 0002: graph renderer와 layout](docs/adr/0002-graph-renderer-and-layout.md)
 - [ADR 0001: jotai-devtools runtime adapter](docs/adr/0001-jotai-devtools-runtime-adapter.md)
 - [기여 가이드](CONTRIBUTING.md)

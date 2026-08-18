@@ -1,7 +1,4 @@
-import {
-  useTrackedAtom,
-  useTrackedAtomValue,
-} from '@jotai-visualizer/react'
+import { useAtom, useAtomValue } from 'jotai'
 
 import {
   countAtom,
@@ -10,21 +7,13 @@ import {
   privateDiagnosticsAtom,
 } from './atoms.js'
 
-function InternalDiagnostics({ scope }: { scope: string }) {
-  useTrackedAtomValue(privateDiagnosticsAtom, {
-    id: `src/App.tsx#${scope}InternalDiagnostics`,
-    name: `${scope} InternalDiagnostics`,
-    file: 'examples/vite-react/src/App.tsx',
-  })
+function InternalDiagnostics() {
+  useAtomValue(privateDiagnosticsAtom)
   return null
 }
 
-function Counter({ scope }: { scope: string }) {
-  const [count, setCount] = useTrackedAtom(countAtom, {
-    id: `src/App.tsx#${scope}Counter`,
-    name: `${scope} Counter`,
-    file: 'examples/vite-react/src/App.tsx',
-  })
+function Counter() {
+  const [count, setCount] = useAtom(countAtom)
 
   return (
     <section className="card" aria-labelledby="counter-title">
@@ -50,17 +39,9 @@ function Counter({ scope }: { scope: string }) {
   )
 }
 
-function DerivedSummary({ scope }: { scope: string }) {
-  const doubledCount = useTrackedAtomValue(doubledCountAtom, {
-    id: `src/App.tsx#${scope}DerivedSummary`,
-    name: `${scope} DerivedSummary`,
-    file: 'examples/vite-react/src/App.tsx',
-  })
-  const status = useTrackedAtomValue(countStatusAtom, {
-    id: `src/App.tsx#${scope}DerivedSummary`,
-    name: `${scope} DerivedSummary`,
-    file: 'examples/vite-react/src/App.tsx',
-  })
+function DerivedSummary() {
+  const doubledCount = useAtomValue(doubledCountAtom)
+  const status = useAtomValue(countStatusAtom)
 
   return (
     <section className="card" aria-labelledby="summary-title">
@@ -87,14 +68,14 @@ export function App({ scope }: { scope: string }) {
 
   return (
     <section className="scope" aria-labelledby={`${scopeId}-title`}>
-      <InternalDiagnostics scope={scope} />
+      <InternalDiagnostics />
       <div className="scope-heading">
         <p className="eyebrow">Independent Jotai state scope</p>
         <h2 id={`${scopeId}-title`}>{scope}</h2>
       </div>
       <div className="grid">
-        <Counter scope={scope} />
-        <DerivedSummary scope={scope} />
+        <Counter />
+        <DerivedSummary />
       </div>
     </section>
   )

@@ -9,6 +9,8 @@ import {
 import type { GraphSnapshot } from '@jotai-visualizer/core'
 import type { RuntimeGraph } from '@jotai-visualizer/core'
 
+import { registerActiveRuntime } from './hmr.js'
+
 const RuntimeGraphContext = createContext<RuntimeGraph | undefined>(undefined)
 
 export function RuntimeGraphProvider({
@@ -18,6 +20,8 @@ export function RuntimeGraphProvider({
   children: ReactNode
   runtime: RuntimeGraph
 }) {
+  useEffect(() => registerActiveRuntime(runtime), [runtime])
+
   return (
     <RuntimeGraphContext.Provider value={runtime}>
       {children}

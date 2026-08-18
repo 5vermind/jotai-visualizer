@@ -183,4 +183,40 @@ describe('framework-independent RuntimeGraph', () => {
       .nodes.find((candidate) => candidate.kind === 'atom')
     expect(node).toMatchObject({ private: true, revision: 1 })
   })
+
+  it('releases only consumers owned by a replaced source module', () => {
+    const runtime = createRuntimeGraph()
+    const store = {}
+    const firstAtom = createAtomIdentity('firstAtom')
+    const secondAtom = createAtomIdentity('secondAtom')
+    runtime.registerConsumer({
+      store,
+      atom: firstAtom,
+      component: {
+        id: 'src/First.tsx#First',
+        name: 'First',
+        file: 'src/First.tsx',
+      },
+      access: 'read',
+    })
+    runtime.registerConsumer({
+      store,
+      atom: secondAtom,
+      component: {
+        id: 'src/Second.tsx#Second',
+        name: 'Second',
+        file: 'src/Second.tsx',
+      },
+      access: 'read',
+    })
+
+    runtime.releaseConsumersByFile('src/First.tsx')
+
+    const snapshot = runtime.getSnapshot()
+    expect(snapshot.nodes.map((node) => node.label)).toEqual([
+      'Second',
+      'secondAtom',
+    ])
+    expect(snapshot.edges).toHaveLength(1)
+  })
 })

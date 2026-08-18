@@ -5,6 +5,7 @@ export {
   useRuntimeGraphSnapshot,
 } from './runtime-context.js'
 export { JotaiGraphCollector } from './jotai-devtools-adapter.js'
+export { registerVisualizerModule } from './hmr.js'
 export {
   JotaiVisualizer,
   type JotaiVisualizerProps,

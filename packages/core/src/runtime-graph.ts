@@ -58,6 +58,7 @@ export type RuntimeGraph = {
     component: ComponentMetadata
     access: ConsumerAccess
   }): () => void
+  releaseConsumersByFile(file: string): void
   releaseStore(store: RuntimeStore): void
   subscribe(listener: () => void): () => void
   syncAtomSnapshot(store: RuntimeStore, snapshot: RuntimeAtomSnapshot): void
@@ -76,6 +77,15 @@ export const createRuntimeGraph = (
   const storeCollections = new WeakMap<RuntimeStore, StoreCollection>()
   const consumerCounts = new Map<string, number>()
   const consumerStoreIds = new Map<string, string>()
+  const consumerRecords = new Map<
+    string,
+    {
+      atomNodeId: string
+      componentNodeId: string
+      file: string | undefined
+      store: RuntimeStore
+    }
+  >()
   const atomRevisions = new Map<
     string,
     { revision: number; value: unknown }
@@ -215,6 +225,12 @@ export const createRuntimeGraph = (
       })
       consumerCounts.set(edgeId, (consumerCounts.get(edgeId) ?? 0) + 1)
       consumerStoreIds.set(edgeId, atomNode.storeId)
+      consumerRecords.set(edgeId, {
+        atomNodeId: atomNode.id,
+        componentNodeId,
+        file: component.file,
+        store,
+      })
 
       let active = true
       return () => {
@@ -233,6 +249,7 @@ export const createRuntimeGraph = (
 
         consumerCounts.delete(edgeId)
         consumerStoreIds.delete(edgeId)
+        consumerRecords.delete(edgeId)
         const atomIsCollected = storeCollections
           .get(store)
           ?.nodeIds.has(atomNode.id)
@@ -252,6 +269,51 @@ export const createRuntimeGraph = (
           ],
         })
       }
+    },
+    releaseConsumersByFile: (file) => {
+      const records = [...consumerRecords.entries()].filter(
+        ([, record]) => record.file === file,
+      )
+      if (records.length === 0) {
+        return
+      }
+
+      const removedEdgeIds = new Set(records.map(([edgeId]) => edgeId))
+      records.forEach(([edgeId]) => {
+        consumerCounts.delete(edgeId)
+        consumerStoreIds.delete(edgeId)
+        consumerRecords.delete(edgeId)
+      })
+      const remainingEdges = graphStore
+        .getSnapshot()
+        .edges.filter((edge) => !removedEdgeIds.has(edge.id))
+      const removeNodeIds = new Set<string>()
+      records.forEach(([, record]) => {
+        const atomIsCollected = storeCollections
+          .get(record.store)
+          ?.nodeIds.has(record.atomNodeId)
+        const atomHasRemainingConsumer = remainingEdges.some(
+          (edge) =>
+            edge.kind === 'component-consumer' &&
+            edge.source === record.atomNodeId,
+        )
+        if (!atomIsCollected && !atomHasRemainingConsumer) {
+          removeNodeIds.add(record.atomNodeId)
+        }
+        const componentHasRemainingEdge = remainingEdges.some(
+          (edge) =>
+            edge.source === record.componentNodeId ||
+            edge.target === record.componentNodeId,
+        )
+        if (!componentHasRemainingEdge) {
+          removeNodeIds.add(record.componentNodeId)
+        }
+      })
+
+      applyInternalPatch({
+        removeEdgeIds: [...removedEdgeIds],
+        removeNodeIds: [...removeNodeIds],
+      })
     },
     releaseStore: (store) => {
       const storeId = storeIds.peek(store)
@@ -273,6 +335,7 @@ export const createRuntimeGraph = (
       removedConsumerEdges.forEach((edgeId) => {
         consumerCounts.delete(edgeId)
         consumerStoreIds.delete(edgeId)
+        consumerRecords.delete(edgeId)
       })
 
       applyInternalPatch({ removeNodeIds: atomNodeIds })

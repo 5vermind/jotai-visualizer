@@ -12,12 +12,13 @@
   },
   "scripts": {
     "build": "pnpm --recursive --if-present run build",
-    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm verify:production",
     "dev": "pnpm --filter @jotai-visualizer/example-vite-react dev",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "pnpm --recursive --if-present run typecheck"
+    "typecheck": "pnpm --recursive --if-present run typecheck",
+    "verify:production": "node scripts/verify-production-build.mjs"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",

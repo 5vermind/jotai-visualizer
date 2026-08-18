@@ -1,6 +1,6 @@
 # Jotai Visualizer 프로젝트 로드맵
 
-> 상태: Active — M3 완료, M4 대기
+> 상태: Active — M4 완료, M5 대기
 > 기준일: 2026-08-18
 > 문서 역할: 구현 범위, 아키텍처, 단계별 완료 조건에 대한 단일 기준 문서
 
@@ -387,23 +387,38 @@ Dagre를 우선 검토하고 compound graph가 필요할 때 ELK로 확장한다
 
 **목표:** 사용자가 Jotai hook을 바꾸지 않아도 component 관계를 수집한다.
 
+**상태:** 완료 (2026-08-18)
+
 산출물:
 
-- [ ] Babel transform fixture와 source map
-- [ ] aliased import 처리
-- [ ] `useAtom`, `useAtomValue`, `useSetAtom` 변환
-- [ ] component/source metadata 주입
-- [ ] Vite plugin과 virtual module
-- [ ] HMR cleanup
-- [ ] unsupported pattern diagnostic
+- [x] Babel transform fixture와 source map
+- [x] aliased import 처리
+- [x] `useAtom`, `useAtomValue`, `useSetAtom` 변환
+- [x] component/source metadata 주입
+- [x] Vite plugin과 virtual module
+- [x] HMR cleanup
+- [x] unsupported pattern diagnostic
 
 완료 조건:
 
-- [ ] 원본 hook의 runtime 결과와 TypeScript type이 유지된다.
-- [ ] hook 순서가 변경되지 않는다.
-- [ ] React StrictMode에서 edge가 중복되거나 누락되지 않는다.
-- [ ] HMR 이후 stale component/atom node가 남지 않는다.
-- [ ] production build에서 계측 코드가 제거된다.
+- [x] 원본 hook의 runtime 결과와 TypeScript type이 유지된다.
+- [x] hook 순서가 변경되지 않는다.
+- [x] React StrictMode에서 edge가 중복되거나 누락되지 않는다.
+- [x] HMR 이후 stale component/atom node가 남지 않는다.
+- [x] production build에서 계측 코드가 제거된다.
+
+검증 기록:
+
+- Babel input fixture, alias/metadata/options/call-order/source-map test
+- unsupported custom hook/namespace/reference/spread diagnostic test
+- Vite virtual module, development-only apply, root include test
+- active RuntimeGraph HMR replacement와 removed-file cleanup test
+- 원본 Jotai hook example TypeScript typecheck
+- dev server transformed module marker 검사
+- Chrome 자동 graph 8 nodes / 10 edges와 Counter runtime update
+- production JS/CSS devtool marker 부재 검사
+- [M4 Automatic Instrumentation 문서](M4_AUTOMATIC_INSTRUMENTATION.md)
+- [ADR 0003](adr/0003-development-only-babel-instrumentation.md)
 
 ### M5 — Compatibility and performance
 
@@ -520,7 +535,7 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 2. `jotai-devtools` 재사용: ADR 0001에서 M5까지 제한 승인
 3. graph UI: ADR 0002에서 `@xyflow/react` 채택
 4. layout engine: ADR 0002에서 Dagre 채택
-5. Babel transform을 독립 구현할지 기존 Jotai Babel plugin을 확장할지 여부
+5. Babel transform: ADR 0003에서 독립 Babel 7 plugin 구현
 6. 지원할 Jotai/React/Vite 최소 버전
 7. value preview: 기본 비활성화와 opt-in redaction 구현 완료
 
@@ -535,12 +550,12 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 
 ## 15. 다음 실행 항목
 
-현재 다음 작업은 **M4 — Automatic instrumentation**이다.
+현재 다음 작업은 **M5 — Compatibility and performance**다.
 
-1. Babel transform boundary와 지원 syntax를 ADR로 확정한다.
-2. Jotai hook import와 component scope를 식별하는 fixture를 작성한다.
-3. tracked hook 호출과 source metadata를 자동 주입한다.
-4. Vite plugin, source map, HMR cleanup을 연결한다.
-5. production build에서 계측 코드 제거를 검증한다.
+1. Jotai/React/Vite 지원 version matrix를 확정한다.
+2. async/Suspense atom과 atomFamily integration test를 추가한다.
+3. nested Provider와 multiple Store lifecycle을 검증한다.
+4. 500+ node browser benchmark와 memory lifecycle test를 실행한다.
+5. 알려진 호환성 제한과 performance budget을 문서화한다.
 
-M4 완료 전에는 브라우저 확장, time travel, 다중 bundler 지원을 시작하지 않는다.
+M5 완료 전에는 브라우저 확장, time travel, 다중 bundler 지원을 시작하지 않는다.
