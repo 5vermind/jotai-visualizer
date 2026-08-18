@@ -1,0 +1,8 @@
+packages:
+  - packages/*
+  - examples/*
+
+# Vite requires esbuild's platform binary. Keep dependency lifecycle scripts
+# denied by default and allow only this reviewed build step.
+onlyBuiltDependencies:
+  - esbuild

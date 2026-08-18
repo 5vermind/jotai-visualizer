@@ -1,0 +1,21 @@
+{
+  "name": "@jotai-visualizer/core",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Framework-independent graph model for Jotai Visualizer.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}

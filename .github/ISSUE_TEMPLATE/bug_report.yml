@@ -1,0 +1,40 @@
+name: Bug report
+description: Report a reproducible problem in Jotai Visualizer.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve Jotai Visualizer.
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Include Jotai, React, bundler, browser, and Node.js versions.
+      placeholder: Jotai 2.x, React 19.x, Vite 6.x, Chrome, Node.js 20.x
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Link a repository or provide the smallest code sample that reproduces the issue.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add screenshots, logs, Store configuration, or atom patterns when relevant.
