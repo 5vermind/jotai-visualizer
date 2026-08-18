@@ -15,9 +15,10 @@ Jotai의 atom, atom 간 의존성, 그리고 atom을 소비하는 React 컴포�
 
 ## 현재 상태
 
-`v0.1.0` 첫 오픈소스 preview를 준비했습니다. GitHub Release는 검증된 package
-tarball을 제공하며 npm registry publish는 `@jotai-visualizer` organization 설정 후
-활성화됩니다.
+[`v0.1.0`](https://github.com/5vermind/jotai-visualizer/releases/tag/v0.1.0)
+첫 오픈소스 preview가 공개되었습니다. GitHub Release는 검증된 package tarball과
+checksum을 제공하며 npm registry publish는 `@jotai-visualizer` organization 설정
+후 활성화됩니다.
 구현 범위, 아키텍처, 단계별 완료 조건은
 [프로젝트 로드맵](docs/PROJECT_ROADMAP.md)을 기준으로 관리합니다.
 

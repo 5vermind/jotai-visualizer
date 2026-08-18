@@ -1,6 +1,6 @@
 # Jotai Visualizer 프로젝트 로드맵
 
-> 상태: Active — M5 완료, M6 대기
+> 상태: M0–M6 완료 — `v0.1.0` GitHub Release 공개
 > 기준일: 2026-08-18
 > 문서 역할: 구현 범위, 아키텍처, 단계별 완료 조건에 대한 단일 기준 문서
 
@@ -462,7 +462,7 @@ Dagre를 우선 검토하고 compound graph가 필요할 때 ELK로 확장한다
 **목표:** 외부 사용자가 설치하고 문제를 재현하며 기여할 수 있는 첫 버전을
 배포한다.
 
-**상태:** Release candidate — GitHub `v0.1.0` tag 대기
+**상태:** 완료 (2026-08-18)
 
 산출물:
 
@@ -471,7 +471,7 @@ Dagre를 우선 검토하고 compound graph가 필요할 때 ELK로 확장한다
 - [x] package별 public API 검토
 - [x] changeset 또는 release workflow
 - [x] security/privacy 문서
-- [ ] `0.1.0` release
+- [x] `0.1.0` release
 
 완료 조건:
 
@@ -489,6 +489,15 @@ Release candidate 검증:
 - [Installation](INSTALLATION.md)
 - [Public API](PUBLIC_API.md)
 - [Security](../SECURITY.md)와 [Privacy](PRIVACY.md)
+
+Release 결과:
+
+- annotated tag `v0.1.0`
+- [GitHub Release](https://github.com/5vermind/jotai-visualizer/releases/tag/v0.1.0)
+- npm-compatible package tarball 5개
+- SHA-256 checksum asset
+- npm provenance workflow 준비 완료
+- npm registry publish는 organization scope/authentication 설정 대기
 
 ## 10. 후속 후보
 
@@ -563,7 +572,7 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 3. graph UI: ADR 0002에서 `@xyflow/react` 채택
 4. layout engine: ADR 0002에서 Dagre 채택
 5. Babel transform: ADR 0003에서 독립 Babel 7 plugin 구현
-6. 지원할 Jotai/React/Vite 최소 버전
+6. 지원 version: React 18.3, Jotai 2.20, Vite 6.4로 확정
 7. value preview: 기본 비활성화와 opt-in redaction 구현 완료
 
 ## 14. 진행 규칙
@@ -577,12 +586,13 @@ MVP 이후 사용자 요구와 유지보수 비용을 평가해 우선순위를 
 
 ## 15. 다음 실행 항목
 
-현재 다음 작업은 **M6 — First open-source release**다.
+M0~M6가 완료되었다. 다음 작업은 `0.1.x` 운영과 후속 roadmap 선정이다.
 
-1. package별 public API와 publish export를 확정한다.
-2. changeset/release workflow와 package provenance를 구성한다.
-3. 설치, security/privacy, migration 문서를 완성한다.
-4. 새 소비 프로젝트에서 문서 설치 예제를 재현한다.
-5. dogfooding 결과를 반영하고 `0.1.0`을 배포한다.
+1. npm `@jotai-visualizer` organization과 trusted publisher를 설정한다.
+2. `Publish npm packages` workflow로 `v0.1.0` tarball을 registry에 게시한다.
+3. 첫 사용자 feedback과 bug report를 triage한다.
+4. custom hook propagation과 Jotai 3 adapter 우선순위를 결정한다.
+5. browser extension, history/time travel 중 다음 milestone을 선택한다.
 
-M6 완료 전에는 브라우저 확장, time travel, 다중 bundler 지원을 시작하지 않는다.
+npm registry publish 전까지 GitHub Release tarball 설치 절차를 공식 배포 경로로
+유지한다.

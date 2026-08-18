@@ -2,7 +2,7 @@
 
 > 작성일: 2026-08-18
 > 목표 버전: `0.1.0`
-> 상태: Release candidate verified — tag/release 대기
+> 상태: 완료 — GitHub `v0.1.0` release published
 
 ## 릴리스 채널
 
